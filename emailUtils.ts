@@ -29,8 +29,12 @@ export function generateEmailBody(slots: string[], dateStr: string): string {
   `;
 }
 
-export function generateSubjectLine(date: string, data: string[]): string {
+export function generateSubjectLine(
+  date: string,
+  data: string[],
+  runNumber: number
+): string {
   const dateFormatted = formatPrettyDate(date);
 
-  return `Appointment Available on ${dateFormatted} – ${data[0]}`;
+  return `#${runNumber} Appointment Available on ${dateFormatted} – ${data[0]}`;
 }

@@ -21,6 +21,9 @@ const MAX_DAILY_EMAILS = process.env.MAX_DAILY_EMAILS
   : 20;
 const FORCE_RESET_STATE = process.env.RESET_STATE === "true";
 const EXACT_DATE = process.env.EXACT_DATE || "2025-09-27"; // e.g. 2025-12-19
+const RUN_NUMBER = process.env.RUN_NUMBER
+  ? parseInt(process.env.RUN_NUMBER)
+  : 0;
 
 function loadState(): State {
   try {
@@ -69,9 +72,7 @@ async function checkAndNotify() {
       state.lastResetDate = DateTime.now()
         .setZone("America/New_York")
         .toISODate();
-      state.runNumber = process.env.RUN_NUMBER
-        ? parseInt(process.env.RUN_NUMBER)
-        : 0;
+      state.runNumber = RUN_NUMBER;
       state.lastAvailableSlots = [];
     }
 
@@ -85,16 +86,14 @@ async function checkAndNotify() {
       if (shouldSendEmail) {
         console.log("Sending email");
         await sendEmail({
-          subject: generateSubjectLine(EXACT_DATE, availableSlots),
+          subject: generateSubjectLine(EXACT_DATE, availableSlots, RUN_NUMBER),
           html: generateEmailBody(availableSlots, EXACT_DATE),
         });
 
         // Update state
         state.lastAvailableSlots = availableSlots;
         state.emailCount++;
-        state.runNumber = process.env.RUN_NUMBER
-          ? parseInt(process.env.RUN_NUMBER)
-          : 0;
+        state.runNumber = RUN_NUMBER;
         saveState(state);
 
         console.log(

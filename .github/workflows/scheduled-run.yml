@@ -2,8 +2,7 @@ name: Scheduled Run
 
 on:
   schedule:
-    - cron: "*/5 10-23 * * *"
-    - cron: "*/5 0-1 * * *"
+    - cron: "*/5 * * * *"
   workflow_dispatch:
     inputs:
       reset_state:
@@ -33,14 +32,8 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           RESEND_FROM: ${{ vars.RESEND_FROM }}
           RESEND_TO: ${{ vars.RESEND_TO }}
-          FUTURE_DAYS: ${{ vars.FUTURE_DAYS }}
-          WEEKDAY_START: ${{ vars.WEEKDAY_START }}
-          WEEKDAY_END: ${{ vars.WEEKDAY_END }}
-          WEEKEND_START: ${{ vars.WEEKEND_START }}
-          WEEKEND_END: ${{ vars.WEEKEND_END }}
+          EXACT_DATE: ${{ vars.EXACT_DATE }}
           MAX_DAILY_EMAILS: ${{ vars.MAX_DAILY_EMAILS }}
-          ALLOWED_WEEKDAY_INDICES: ${{ vars.ALLOWED_WEEKDAY_INDICES }}
-          FORCE_EMAIL: ${{ github.event.inputs.force_email }}
           RESET_STATE: ${{ github.event.inputs.reset_state }}
           RUN_NUMBER: ${{ github.run_number }}
         run: npm start
