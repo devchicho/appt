@@ -1,5 +1,4 @@
 import { load as loadHtml } from "cheerio";
-import { formatPrettyDate } from "./dateUtils";
 
 async function randomWait() {
   const randomTime = Math.floor(Math.random() * 3000) + 1000; // Random wait between 1 to 3 seconds
@@ -19,16 +18,19 @@ const areDatesEqual = (date1: string, date2: string) => {
 };
 
 function processResponse(html: string, dateStr: string) {
+  console.log("Processing response...");
+  console.log("html start ----");
+  console.log(html);
+  console.log("html end ----");
+
   let [_, yyyy, mm, dd] = html.match(REGEX) || [];
+  console.log("Extracted date:", _);
   const month = Number(mm) + 1;
   const receivedDate = `${yyyy}-${month}-${dd}`;
 
   if (!areDatesEqual(receivedDate, dateStr)) {
     console.log("SLOTS NOT FOUND!!!");
-    console.log(
-      `Received response for different date: ${receivedDate} - `,
-      formatPrettyDate(receivedDate)
-    );
+    console.log(`Received response for different date: ${receivedDate} - `);
     return [];
   }
 
@@ -47,6 +49,7 @@ function processResponse(html: string, dateStr: string) {
 export async function loadData(dateStr: string): Promise<any> {
   await randomWait();
   try {
+    console.log(`Fetching data for ${dateStr}...`);
     const response = await fetch(
       `https://telegov.njportal.com/njmvc/AppointmentWizard/12/125?date=${dateStr}`,
       {
