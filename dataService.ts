@@ -19,10 +19,11 @@ const areDatesEqual = (date1: string, date2: string) => {
 
 function processResponse(html: string, dateStr: string) {
   console.log("Processing response...");
+  /*
   console.log("html start ----");
   console.log(html);
   console.log("html end ----");
-
+*/
   let [_, yyyy, mm, dd] = html.match(REGEX) || [];
   console.log("Extracted date:", _);
   const month = Number(mm) + 1;
