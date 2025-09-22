@@ -1,0 +1,54 @@
+name: Scheduled Run
+
+on:
+  schedule:
+    - cron: "*/5 10-23 * * *"
+    - cron: "*/5 0-1 * * *"
+  workflow_dispatch:
+    inputs:
+      reset_state:
+        description: "Reset state"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run script
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_FROM: ${{ vars.RESEND_FROM }}
+          RESEND_TO: ${{ vars.RESEND_TO }}
+          FUTURE_DAYS: ${{ vars.FUTURE_DAYS }}
+          WEEKDAY_START: ${{ vars.WEEKDAY_START }}
+          WEEKDAY_END: ${{ vars.WEEKDAY_END }}
+          WEEKEND_START: ${{ vars.WEEKEND_START }}
+          WEEKEND_END: ${{ vars.WEEKEND_END }}
+          MAX_DAILY_EMAILS: ${{ vars.MAX_DAILY_EMAILS }}
+          ALLOWED_WEEKDAY_INDICES: ${{ vars.ALLOWED_WEEKDAY_INDICES }}
+          FORCE_EMAIL: ${{ github.event.inputs.force_email }}
+          RESET_STATE: ${{ github.event.inputs.reset_state }}
+          RUN_NUMBER: ${{ github.run_number }}
+        run: npm start
+
+      - name: Commit updated state file
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "Update state file [skip ci]"
+          add: "state.json"
+          author_name: "GitHub Actions Bot"
+          author_email: "actions-bot@example.com"
