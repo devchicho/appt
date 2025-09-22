@@ -25,13 +25,14 @@ function processResponse(html: string, dateStr: string) {
   console.log("html end ----");
 */
   let [_, yyyy, mm, dd] = html.match(REGEX) || [];
-  console.log("Extracted date:", _);
+  console.log("Extracted date:");
+  console.log(_);
   const month = Number(mm) + 1;
   const receivedDate = `${yyyy}-${month}-${dd}`;
 
   if (!areDatesEqual(receivedDate, dateStr)) {
     console.log("SLOTS NOT FOUND!!!");
-    console.log(`Received response for different date: ${receivedDate} - `);
+    console.log(`Received response for different date: ${receivedDate}`);
     return [];
   }
 
