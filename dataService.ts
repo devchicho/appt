@@ -30,14 +30,14 @@ function processResponse(
   */
 
   let [_, yyyy, mm, dd] = html.match(REGEX) || [];
-  console.log("Extracted date:");
+  console.log("Regex match:");
   console.log(_);
   const month = Number(mm) + 1;
   const receivedDate = `${yyyy}-${month}-${dd}`;
 
   if (!isResponseRelevant(receivedDate, dateStr)) {
-    console.log("SLOTS NOT FOUND!!!");
     console.log(`Received response for date: ${receivedDate}`);
+    console.log("SLOTS NOT FOUND!!!");
     return { date: receivedDate, results: [] as string[] };
   }
 
@@ -49,7 +49,7 @@ function processResponse(
     results.push($(element).text().trim());
   });
 
-  console.log(`slots for ${receivedDate}: `, results.length);
+  // console.log(`slots for ${receivedDate}: `, results.length);
   return { date: receivedDate, results };
 }
 
@@ -60,7 +60,7 @@ export async function loadData(
   try {
     console.log(`Fetching data for ${dateStr}...`);
     const response = await fetch(
-      `https://telegov.njportal.com/njmvc/AppointmentWizard/12/125?date=${dateStr}`,
+      "https://telegov.njportal.com/njmvc/AppointmentWizard/12/125",
       {
         headers: {
           accept:

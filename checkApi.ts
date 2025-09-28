@@ -77,10 +77,9 @@ async function checkAndNotify() {
     }
 
     const { date, availableSlots } = await loadData(UPTO_DATE);
-    console.log("Available slots: ", availableSlots.length);
-    console.log(JSON.stringify(availableSlots, null, 2));
 
     if (availableSlots.length > 0) {
+      console.log(JSON.stringify(availableSlots, null, 2));
       const shouldSendEmail = state.emailCount < MAX_DAILY_EMAILS;
 
       if (shouldSendEmail) {
@@ -97,7 +96,7 @@ async function checkAndNotify() {
         saveState(state);
 
         console.log(
-          `Email sent with new slot information. Daily email count: ${state.emailCount}/${MAX_DAILY_EMAILS}`
+          `Email sent. Daily email count: ${state.emailCount}/${MAX_DAILY_EMAILS}`
         );
       } else if (state.emailCount >= MAX_DAILY_EMAILS) {
         console.log(
