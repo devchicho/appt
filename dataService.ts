@@ -13,16 +13,21 @@ const normalizeDate = (dateStr: string) => {
   return new Date(y, m - 1, d).getTime();
 };
 
-const areDatesEqual = (date1: string, date2: string) => {
-  return normalizeDate(date1) === normalizeDate(date2);
+const isResponseRelevant = (responseDate: string, uptoDate: string) => {
+  return normalizeDate(responseDate) <= normalizeDate(uptoDate);
 };
 
-function processResponse(html: string, dateStr: string) {
+function processResponse(
+  html: string,
+  dateStr: string
+): { date: string; results: string[] } {
   console.log("Processing response...");
-  
+
+  /*
   console.log("html start ----");
   console.log(html);
   console.log("html end ----");
+  */
 
   let [_, yyyy, mm, dd] = html.match(REGEX) || [];
   console.log("Extracted date:");
@@ -30,10 +35,10 @@ function processResponse(html: string, dateStr: string) {
   const month = Number(mm) + 1;
   const receivedDate = `${yyyy}-${month}-${dd}`;
 
-  if (!areDatesEqual(receivedDate, dateStr)) {
+  if (!isResponseRelevant(receivedDate, dateStr)) {
     console.log("SLOTS NOT FOUND!!!");
-    console.log(`Received response for different date: ${receivedDate}`);
-    return [];
+    console.log(`Received response for date: ${receivedDate}`);
+    return { date: receivedDate, results: [] as string[] };
   }
 
   const $ = loadHtml(html);
@@ -44,11 +49,13 @@ function processResponse(html: string, dateStr: string) {
     results.push($(element).text().trim());
   });
 
-  console.log(`slots for ${dateStr}: `, results.length);
-  return results;
+  console.log(`slots for ${receivedDate}: `, results.length);
+  return { date: receivedDate, results };
 }
 
-export async function loadData(dateStr: string): Promise<any> {
+export async function loadData(
+  dateStr: string
+): Promise<{ date: string; availableSlots: string[] }> {
   await randomWait();
   try {
     console.log(`Fetching data for ${dateStr}...`);
@@ -77,10 +84,10 @@ export async function loadData(dateStr: string): Promise<any> {
         method: "GET",
       }
     ).then((res) => res.text());
-    const processed = processResponse(response, dateStr);
-    return { date: dateStr, availableSlots: processed };
+    const { date, results } = processResponse(response, dateStr);
+    return { date: date, availableSlots: results };
   } catch (error) {
     console.error(`Error fetching data for ${dateStr}:`, error);
-    return null;
+    return { date: dateStr, availableSlots: [] };
   }
 }

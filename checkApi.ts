@@ -20,7 +20,7 @@ const MAX_DAILY_EMAILS = process.env.MAX_DAILY_EMAILS
   ? parseInt(process.env.MAX_DAILY_EMAILS)
   : 20;
 const FORCE_RESET_STATE = process.env.RESET_STATE === "true";
-const EXACT_DATE = process.env.EXACT_DATE || "2025-09-27"; // e.g. 2025-12-19
+const UPTO_DATE = process.env.UPTO_DATE || "2025-12-31"; // e.g. 2025-12-19
 const RUN_NUMBER = process.env.RUN_NUMBER
   ? parseInt(process.env.RUN_NUMBER)
   : 0;
@@ -76,7 +76,7 @@ async function checkAndNotify() {
       state.lastAvailableSlots = [];
     }
 
-    const { availableSlots } = await loadData(EXACT_DATE);
+    const { date, availableSlots } = await loadData(UPTO_DATE);
     console.log("Available slots: ", availableSlots.length);
     console.log(JSON.stringify(availableSlots, null, 2));
 
@@ -86,8 +86,8 @@ async function checkAndNotify() {
       if (shouldSendEmail) {
         console.log("Sending email");
         await sendEmail({
-          subject: generateSubjectLine(EXACT_DATE, availableSlots, RUN_NUMBER),
-          html: generateEmailBody(availableSlots, EXACT_DATE),
+          subject: generateSubjectLine(date, availableSlots, RUN_NUMBER),
+          html: generateEmailBody(availableSlots, date),
         });
 
         // Update state
