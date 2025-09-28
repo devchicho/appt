@@ -90,7 +90,7 @@ async function checkAndNotify() {
         });
 
         // Update state
-        state.lastAvailableSlots = { date: availableSlots };
+        state.lastAvailableSlots = { [date]: availableSlots };
         state.emailCount++;
         state.runNumber = RUN_NUMBER;
         saveState(state);
