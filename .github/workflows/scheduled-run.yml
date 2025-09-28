@@ -32,7 +32,7 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           RESEND_FROM: ${{ vars.RESEND_FROM }}
           RESEND_TO: ${{ vars.RESEND_TO }}
-          EXACT_DATE: ${{ vars.EXACT_DATE }}
+          UPTO_DATE: ${{ vars.UPTO_DATE }}
           MAX_DAILY_EMAILS: ${{ vars.MAX_DAILY_EMAILS }}
           RESET_STATE: ${{ github.event.inputs.reset_state }}
           RUN_NUMBER: ${{ github.run_number }}
