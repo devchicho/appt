@@ -58,7 +58,7 @@ export async function loadData(
 ): Promise<{ date: string; availableSlots: string[] }> {
   await randomWait();
   try {
-    console.log(`Fetching data for ${dateStr}...`);
+    console.log(`Looking slots upto ${dateStr}...`);
     const response = await fetch(
       "https://telegov.njportal.com/njmvc/AppointmentWizard/12/125",
       {
