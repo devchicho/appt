@@ -9,7 +9,7 @@ import { loadData } from "./dataService";
 dotenv.config();
 
 interface State {
-  lastAvailableSlots: any[];
+  lastAvailableSlots: Record<string, string[]>;
   emailCount: number;
   lastResetDate: string | null;
   runNumber: number;
@@ -36,7 +36,7 @@ function loadState(): State {
     console.error("Error loading state:", error);
   }
   return {
-    lastAvailableSlots: [],
+    lastAvailableSlots: {},
     emailCount: 0,
     lastResetDate: null,
     runNumber: 0,
@@ -73,7 +73,7 @@ async function checkAndNotify() {
         .setZone("America/New_York")
         .toISODate();
       state.runNumber = RUN_NUMBER;
-      state.lastAvailableSlots = [];
+      state.lastAvailableSlots = {};
     }
 
     const { date, availableSlots } = await loadData(UPTO_DATE);
@@ -90,7 +90,7 @@ async function checkAndNotify() {
         });
 
         // Update state
-        state.lastAvailableSlots = availableSlots;
+        state.lastAvailableSlots = { date: availableSlots };
         state.emailCount++;
         state.runNumber = RUN_NUMBER;
         saveState(state);
@@ -98,12 +98,10 @@ async function checkAndNotify() {
         console.log(
           `Email sent. Daily email count: ${state.emailCount}/${MAX_DAILY_EMAILS}`
         );
-      } else if (state.emailCount >= MAX_DAILY_EMAILS) {
+      } else {
         console.log(
           `Daily email limit (${MAX_DAILY_EMAILS}) reached. Skipping email.`
         );
-      } else {
-        console.log("No sooner slots available. Skipping email.");
       }
     } else {
       if (FORCE_RESET_STATE) {
