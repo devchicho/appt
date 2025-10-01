@@ -1,5 +1,3 @@
-import { formatPrettyDate } from "./dateUtils";
-
 /**
  * Create a minimal HTML email body showing available slots.
  * @param {string[]} slots - e.g., ["8:15 AM EST", "8:55 AM EST"]
@@ -34,7 +32,5 @@ export function generateSubjectLine(
   data: string[],
   runNumber: number
 ): string {
-  const dateFormatted = formatPrettyDate(date);
-
-  return `#${runNumber} Appointment Available on ${dateFormatted} – ${data[0]}`;
+  return `#${runNumber} Appointment Available on ${date} – ${data[0]}`;
 }

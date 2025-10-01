@@ -49,7 +49,7 @@ function processResponse(
     results.push($(element).text().trim());
   });
 
-  // console.log(`slots for ${receivedDate}: `, results.length);
+  console.log(`slots for ${receivedDate}: `, results.length);
   return { date: receivedDate, results };
 }
 
