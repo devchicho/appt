@@ -1,6 +1,10 @@
 {
-  "lastAvailableSlots": [],
-  "emailCount": 0,
-  "lastResetDate": null,
-  "runNumber": 0
+  "lastAvailableSlots": {
+    "2025-10-6": [
+      "10:55 AM EDT"
+    ]
+  },
+  "emailCount": 1,
+  "lastResetDate": "2025-10-02",
+  "runNumber": 254
 }
